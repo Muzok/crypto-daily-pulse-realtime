@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Daily Pulse - Real-time</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Crypto Daily Pulse</h1>
+            <div class="subtitle">Real-time Technical & News Analysis <span class="live-indicator"></span></div>
+            <div class="last-updated" id="lastUpdated">Last Updated: Connecting to live data...</div>
+        </header>
+
+        <main class="main-content">
+            <div class="crypto-section live-data" id="btc-section">
+                <div class="crypto-header">
+                    <h2 class="crypto-title">Bitcoin (BTC/USDT)</h2>
+                    <div class="price-display" id="btc-price">$0.00</div>
+                </div>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-card technical-card">
+                        <h3 class="card-title">Technical Analysis</h3>
+                        <div class="indicator-row">
+                            <span class="indicator-label">20-Day SMA:</span>
+                            <span class="indicator-value loading" id="btc-sma20">Loading...</span>
+                        </div>
+                        <div class="indicator-row">
+                            <span class="indicator-label">50-Day SMA:</span>
+                            <span class="indicator-value loading" id="btc-sma50">Loading...</span>
+                        </div>
+                        <div class="indicator-row">
+                            <span class="indicator-label">RSI (14):</span>
+                            <span class="indicator-value loading" id="btc-rsi">Loading...</span>
+                        </div>
+                        <div class="technical-summary" id="btc-technical-summary">
+                            Loading technical analysis...
+                        </div>
+                    </div>
+
+                    <div class="analysis-card news-card">
+                        <h3 class="card-title">News Sentiment</h3>
+                        <div class="sentiment-indicator" id="btc-sentiment">
+                            <span class="sentiment-label">Overall Sentiment:</span>
+                            <span class="sentiment-value">Loading...</span>
+                        </div>
+                        <div class="news-summary" id="btc-news-summary">
+                            Loading news analysis...
+                        </div>
+                        <div class="news-headlines" id="btc-headlines">
+                            <!-- Headlines will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crypto-section live-data" id="eth-section">
+                <div class="crypto-header">
+                    <h2 class="crypto-title">Ethereum (ETH/USDT)</h2>
+                    <div class="price-display" id="eth-price">$0.00</div>
+                </div>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-card technical-card">
+                        <h3 class="card-title">Technical Analysis</h3>
+                        <div class="indicator-row">
+                            <span class="indicator-label">20-Day SMA:</span>
+                            <span class="indicator-value loading" id="eth-sma20">Loading...</span>
+                        </div>
+                        <div class="indicator-row">
+                            <span class="indicator-label">50-Day SMA:</span>
+                            <span class="indicator-value loading" id="eth-sma50">Loading...</span>
+                        </div>
+                        <div class="indicator-row">
+                            <span class="indicator-label">RSI (14):</span>
+                            <span class="indicator-value loading" id="eth-rsi">Loading...</span>
+                        </div>
+                        <div class="technical-summary" id="eth-technical-summary">
+                            Loading technical analysis...
+                        </div>
+                    </div>
+
+                    <div class="analysis-card news-card">
+                        <h3 class="card-title">News Sentiment</h3>
+                        <div class="sentiment-indicator" id="eth-sentiment">
+                            <span class="sentiment-label">Overall Sentiment:</span>
+                            <span class="sentiment-value">Loading...</span>
+                        </div>
+                        <div class="news-summary" id="eth-news-summary">
+                            Loading news analysis...
+                        </div>
+                        <div class="news-headlines" id="eth-headlines">
+                            <!-- Headlines will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Crypto Daily Pulse. Real-time data provided for informational purposes only.</p>
+            <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 5px;">
+                Live prices via Binance WebSocket API | Technical analysis updated every 5 minutes
+            </p>
+        </footer>
+    </div>
+
+    <script src="realtime_script.js"></script>
+</body>
+</html>
+

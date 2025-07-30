@@ -1,0 +1,489 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Orbitron', monospace;
+    background: #0a0a1a;
+    color: #e0e0e0;
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(0, 242, 234, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 242, 234, 0.05) 0%, transparent 50%);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header styles */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px 0;
+    border-bottom: 2px solid rgba(0, 242, 234, 0.3);
+    position: relative;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00f2ea, transparent);
+    box-shadow: 0 0 10px #00f2ea;
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #00f2ea;
+    text-shadow: 0 0 20px rgba(0, 242, 234, 0.5);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #e0e0e0;
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+.last-updated {
+    font-size: 0.9rem;
+    color: #00f2ea;
+    opacity: 0.7;
+}
+
+/* Main content */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.crypto-section {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(0, 242, 234, 0.2);
+    border-radius: 12px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.crypto-section:hover {
+    border-color: rgba(0, 242, 234, 0.4);
+    box-shadow: 0 0 30px rgba(0, 242, 234, 0.1);
+}
+
+.crypto-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 242, 234, 0.2);
+}
+
+.crypto-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #00f2ea;
+    text-shadow: 0 0 10px rgba(0, 242, 234, 0.3);
+}
+
+.price-display {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e0e0e0;
+    background: linear-gradient(135deg, rgba(0, 242, 234, 0.1), rgba(0, 242, 234, 0.05));
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 242, 234, 0.3);
+}
+
+/* Analysis grid */
+.analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.analysis-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 242, 234, 0.15);
+    border-radius: 8px;
+    padding: 25px;
+    transition: all 0.3s ease;
+}
+
+.analysis-card:hover {
+    border-color: rgba(0, 242, 234, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 242, 234, 0.1);
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #00f2ea;
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.card-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00f2ea, transparent);
+}
+
+/* Technical analysis styles */
+.indicator-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 242, 234, 0.1);
+}
+
+.indicator-label {
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    opacity: 0.8;
+}
+
+.indicator-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #00f2ea;
+    text-shadow: 0 0 5px rgba(0, 242, 234, 0.3);
+}
+
+.technical-summary {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 242, 234, 0.05);
+    border-radius: 6px;
+    border-left: 3px solid #00f2ea;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* News sentiment styles */
+.sentiment-indicator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 12px;
+    background: rgba(0, 242, 234, 0.05);
+    border-radius: 6px;
+}
+
+.sentiment-label {
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    opacity: 0.8;
+}
+
+.sentiment-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sentiment-positive {
+    background: rgba(0, 255, 100, 0.2);
+    color: #00ff64;
+    border: 1px solid rgba(0, 255, 100, 0.3);
+}
+
+.sentiment-negative {
+    background: rgba(255, 50, 50, 0.2);
+    color: #ff3232;
+    border: 1px solid rgba(255, 50, 50, 0.3);
+}
+
+.sentiment-neutral {
+    background: rgba(255, 200, 0, 0.2);
+    color: #ffc800;
+    border: 1px solid rgba(255, 200, 0, 0.3);
+}
+
+.news-summary {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0, 242, 234, 0.05);
+    border-radius: 6px;
+    border-left: 3px solid #00f2ea;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.news-headlines {
+    margin-top: 15px;
+}
+
+.headline-item {
+    padding: 10px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    border-left: 2px solid rgba(0, 242, 234, 0.3);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.headline-item:hover {
+    background: rgba(0, 242, 234, 0.05);
+    border-left-color: #00f2ea;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 50px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(0, 242, 234, 0.2);
+    color: #e0e0e0;
+    opacity: 0.6;
+    font-size: 0.9rem;
+}
+
+/* Loading animation */
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+.loading {
+    animation: pulse 2s infinite;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .title {
+        font-size: 2.2rem;
+    }
+    
+    .crypto-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .crypto-title {
+        font-size: 1.6rem;
+    }
+    
+    .price-display {
+        font-size: 1.4rem;
+    }
+    
+    .analysis-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .crypto-section {
+        padding: 20px;
+    }
+    
+    .analysis-card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.8rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .crypto-title {
+        font-size: 1.4rem;
+    }
+    
+    .price-display {
+        font-size: 1.2rem;
+        padding: 8px 15px;
+    }
+    
+    .indicator-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+
+
+/* Real-time price animation styles */
+.price-flash {
+    animation: priceFlash 1s ease-out;
+}
+
+.price-up {
+    color: #00ff64 !important;
+    text-shadow: 0 0 10px rgba(0, 255, 100, 0.5) !important;
+}
+
+.price-down {
+    color: #ff3232 !important;
+    text-shadow: 0 0 10px rgba(255, 50, 50, 0.5) !important;
+}
+
+@keyframes priceFlash {
+    0% {
+        background: rgba(0, 242, 234, 0.3);
+        transform: scale(1.02);
+    }
+    50% {
+        background: rgba(0, 242, 234, 0.1);
+        transform: scale(1.01);
+    }
+    100% {
+        background: transparent;
+        transform: scale(1);
+    }
+}
+
+/* Enhanced price display for real-time updates */
+.price-display {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.price-display::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 242, 234, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.price-display.price-flash::before {
+    left: 100%;
+}
+
+/* Connection status styles */
+#connection-status {
+    animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Enhanced loading animation */
+.loading {
+    animation: pulse 2s infinite, shimmer 2s infinite;
+    background: linear-gradient(90deg, rgba(0, 242, 234, 0.1), rgba(0, 242, 234, 0.3), rgba(0, 242, 234, 0.1));
+    background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Error message styles */
+.error-message {
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Enhanced responsive design for real-time features */
+@media (max-width: 768px) {
+    #connection-status {
+        top: 5px;
+        right: 5px;
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+    
+    .error-message {
+        top: 50px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+}
+
+/* Subtle glow effect for live elements */
+.crypto-section.live-data {
+    box-shadow: 0 0 20px rgba(0, 242, 234, 0.1);
+    border-color: rgba(0, 242, 234, 0.3);
+}
+
+/* Real-time indicator */
+.live-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #00ff64;
+    border-radius: 50%;
+    margin-left: 8px;
+    animation: livePulse 1.5s infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+}
+

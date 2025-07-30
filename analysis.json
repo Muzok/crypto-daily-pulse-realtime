@@ -1,0 +1,41 @@
+{
+  "last_updated": "2025-07-30T06:14:39.495927",
+  "btc": {
+    "price": 118275,
+    "technical_analysis": {
+      "sma_20": 118323.52429039458,
+      "sma_50": 111491.21605948893,
+      "rsi": 48.16951967698116,
+      "summary": "Bullish trend with price above 50-day SMA but below 20-day SMA, indicating potential consolidation. RSI shows healthy momentum without extreme conditions."
+    },
+    "news_sentiment": {
+      "overall_sentiment": "Neutral",
+      "summary": "Market sentiment is mixed with balanced coverage across positive (40%) and negative (0%) news.",
+      "headlines": [
+        "SEC Approves In-Kind Redemptions for All Spot Bitcoin and Ethereum ETFs",
+        "Michael Saylor's Strategy Makes Massive $2.4B Bitcoin Purchase With Preferred Stock Sale Proceeds",
+        "Bitcoin in limbo: Watch these BTC price levels to watch ahead of FOMC",
+        "7% dip or $141K breakout? Bitcoin speculators dictate BTC price targets",
+        "What happens if Bitcoin reaches $1 million?"
+      ]
+    }
+  },
+  "eth": {
+    "price": 3794.04,
+    "technical_analysis": {
+      "sma_20": 3516.0843270437044,
+      "sma_50": 2920.6982616206883,
+      "rsi": 75.00439878065012,
+      "summary": "Strong bullish trend with price above both key moving averages. RSI indicates overbought conditions, potential for pullback."
+    },
+    "news_sentiment": {
+      "overall_sentiment": "Neutral",
+      "summary": "Market sentiment is mixed with balanced coverage across positive (0%) and negative (0%) news.",
+      "headlines": [
+        "SEC Approves In-Kind Redemptions for All Spot Bitcoin and Ethereum ETFs",
+        "Ethereum Defies Bitcoin Slump as Analysts See Path to $5,000",
+        "'Unleash the Zilla': Biotech Rebrands to ETHZilla, Raising Monster $425M for Ethereum Treasury"
+      ]
+    }
+  }
+}
