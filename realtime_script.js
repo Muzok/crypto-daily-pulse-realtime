@@ -1,6 +1,6 @@
 class EnhancedCryptoDashboard {
     constructor() {
-        this.websocketUrl = 'wss://167-172-151-11.nip.io';
+        this.websocketUrl = 'wss://167.172.151.11.nip.io';
         this.websocket = null;
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
