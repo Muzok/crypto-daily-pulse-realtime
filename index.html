@@ -3,123 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Daily Pulse - Real-time Analysis</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Crypto Daily Pulse - Enhanced Real-time Analysis</title>
     <style>
-        /* Traffic-Light Dashboard Styles */
-        .traffic-light-analysis {
-            background: rgba(0, 255, 136, 0.05);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .traffic-light-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
+            color: #e0e6ed;
+            min-height: 100vh;
+            line-height: 1.6;
         }
 
-        .traffic-light-title {
-            color: #00ff88;
-            font-size: 1.4rem;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 2px solid #2a3441;
+        }
+
+        .main-title {
+            font-size: 3rem;
             font-weight: 700;
-            font-family: 'Orbitron', monospace;
+            background: linear-gradient(45deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
         }
 
-        .traffic-status {
+        .subtitle {
+            font-size: 1.2rem;
+            color: #8892b0;
+            margin-bottom: 20px;
+        }
+
+        .status-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .status {
             padding: 8px 20px;
             border-radius: 25px;
-            font-weight: 900;
+            font-weight: 600;
             font-size: 1rem;
-            font-family: 'Orbitron', monospace;
-            text-align: center;
-            min-width: 100px;
-            border: 2px solid;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .status.live {
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            color: #0f1419;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
             animation: pulse 2s infinite;
         }
 
+        .status.connecting {
+            background: linear-gradient(45deg, #ffa500, #ff6b35);
+            color: #0f1419;
+            animation: pulse 1.5s infinite;
+        }
+
+        .status.offline {
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            color: white;
+        }
+
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        .traffic-explanation {
-            color: #ffffff;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: rgba(0, 255, 136, 0.05);
-            border-left: 4px solid #00ff88;
-            border-radius: 8px;
-        }
-
-        .traffic-signals {
-            margin-top: 15px;
-        }
-
-        .signals-title {
-            color: #00ff88;
+        .status-message {
+            color: #64ffda;
             font-size: 0.9rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            font-family: 'Orbitron', monospace;
         }
 
-        .signals-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .signals-list li {
-            color: #ffffff;
-            font-size: 0.85rem;
-            padding: 5px 0;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .signals-list li:before {
-            content: "▶";
-            color: #00ff88;
-            position: absolute;
-            left: 0;
-            top: 5px;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .traffic-light-header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            .traffic-status {
-                min-width: 120px;
-            }
-
-            .traffic-explanation {
-                font-size: 0.9rem;
-            }
-        }
-
-        /* Enhanced crypto card styling */
-        .crypto-card {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 136, 0.05) 100%);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 20px;
-            padding: 30px;
+        .crypto-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
             margin-bottom: 30px;
+        }
+
+        .crypto-card {
+            background: rgba(42, 52, 65, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid #2a3441;
             backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crypto-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            opacity: 0.8;
+        }
+
+        .crypto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
         }
 
         .crypto-header {
@@ -127,36 +134,355 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .crypto-name {
-            color: #00ff88;
             font-size: 1.8rem;
-            font-weight: 700;
-            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            color: #00d4ff;
+        }
+
+        .price-container {
+            text-align: right;
         }
 
         .crypto-price {
-            color: #ffffff;
-            font-size: 1.5rem;
-            font-weight: 900;
-            font-family: 'Orbitron', monospace;
-            background: rgba(0, 255, 136, 0.1);
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 255, 136, 0.3);
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
         }
 
-        .crypto-content {
+        .change {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .change.positive {
+            color: #00ff88;
+        }
+
+        .change.negative {
+            color: #ff4757;
+        }
+
+        .analysis-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 25px;
+            margin-top: 20px;
+        }
+
+        .analysis-section {
+            background: rgba(15, 20, 25, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #2a3441;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .status-badge.green {
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            color: #0f1419;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+        }
+
+        .status-badge.yellow {
+            background: linear-gradient(45deg, #ffa500, #ffdd59);
+            color: #0f1419;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.4);
+        }
+
+        .status-badge.red {
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .analysis-explanation {
+            color: #ccd6f6;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .signals-title {
+            color: #00ff88;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .market-signals {
+            list-style: none;
+            padding: 0;
+        }
+
+        .market-signals li {
+            color: #8892b0;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.85rem;
+        }
+
+        .market-signals li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #00d4ff;
+            font-size: 0.7rem;
+        }
+
+        .technical-indicators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .indicator {
+            text-align: center;
+        }
+
+        .indicator-label {
+            font-size: 0.8rem;
+            color: #8892b0;
+            margin-bottom: 5px;
+        }
+
+        .indicator-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #00d4ff;
+        }
+
+        .rsi-value.overbought {
+            color: #ff4757;
+        }
+
+        .rsi-value.oversold {
+            color: #00ff88;
+        }
+
+        .rsi-value.neutral {
+            color: #ffa500;
+        }
+
+        .macd-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .macd-line, .signal-line {
+            font-size: 0.8rem;
+            color: #8892b0;
+        }
+
+        .histogram.positive {
+            color: #00ff88;
+        }
+
+        .histogram.negative {
+            color: #ff4757;
+        }
+
+        .news-section {
+            background: rgba(42, 52, 65, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid #2a3441;
+            backdrop-filter: blur(10px);
+        }
+
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .sentiment-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sentiment-badge.positive {
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            color: #0f1419;
+        }
+
+        .sentiment-badge.negative {
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            color: white;
+        }
+
+        .sentiment-badge.neutral {
+            background: linear-gradient(45deg, #ffa500, #ffdd59);
+            color: #0f1419;
+        }
+
+        .sentiment-details {
+            margin-bottom: 20px;
+        }
+
+        .sentiment-description {
+            color: #ccd6f6;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .sentiment-score {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .sentiment-score.positive {
+            color: #00ff88;
+        }
+
+        .sentiment-score.negative {
+            color: #ff4757;
+        }
+
+        .sentiment-score.neutral {
+            color: #ffa500;
+        }
+
+        .news-articles {
+            display: grid;
+            gap: 15px;
+        }
+
+        .news-item {
+            background: rgba(15, 20, 25, 0.6);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid #2a3441;
+            transition: all 0.3s ease;
+        }
+
+        .news-item:hover {
+            background: rgba(15, 20, 25, 0.8);
+            border-color: #00d4ff;
+        }
+
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .news-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ccd6f6;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .news-source {
+            font-size: 0.8rem;
+            color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .news-description {
+            color: #8892b0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .news-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .news-date {
+            font-size: 0.8rem;
+            color: #64ffda;
+        }
+
+        .news-link {
+            color: #00d4ff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .news-link:hover {
+            color: #00ff88;
+        }
+
+        .no-news {
+            text-align: center;
+            color: #8892b0;
+            font-style: italic;
+            padding: 20px;
         }
 
         @media (max-width: 768px) {
-            .crypto-content {
+            .container {
+                padding: 15px;
+            }
+
+            .main-title {
+                font-size: 2rem;
+            }
+
+            .analysis-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
+            }
+
+            .crypto-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .technical-indicators {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -164,115 +490,176 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1 class="title">Crypto Daily Pulse</h1>
-            <p class="subtitle">Real-time Technical & News Analysis</p>
+            <h1 class="main-title">Crypto Daily Pulse</h1>
+            <p class="subtitle">Enhanced Real-time Technical & News Analysis</p>
             <div class="status-container">
-                <div id="connection-status" class="status-indicator connecting"></div>
-                <span id="status-text" class="status-text">CONNECTING</span>
+                <div id="connection-status" class="status connecting">CONNECTING</div>
             </div>
-            <p id="last-updated" class="last-updated">Last Updated Connecting to live data...</p>
+            <div id="status-message" class="status-message">Connecting to live data...</div>
         </header>
 
-        <main class="main-content">
+        <main class="crypto-grid">
             <!-- Bitcoin Section -->
-            <div class="crypto-card">
+            <section class="crypto-card">
                 <div class="crypto-header">
                     <h2 class="crypto-name">Bitcoin (BTC/USDT)</h2>
-                    <div id="btc-price" class="crypto-price">$0.00</div>
+                    <div class="price-container">
+                        <div id="btc-price" class="crypto-price">$0.00</div>
+                        <div id="btc-change" class="change">+0.00%</div>
+                    </div>
                 </div>
-                
-                <div class="crypto-content">
-                    <!-- Traffic-Light Analysis -->
-                    <div class="traffic-light-analysis">
-                        <div class="traffic-light-header">
-                            <h3 class="traffic-light-title">Technical Analysis</h3>
-                            <div id="btc-status" class="traffic-status">NEUTRAL</div>
-                        </div>
-                        
-                        <div id="btc-explanation" class="traffic-explanation">
+
+                <div class="analysis-grid">
+                    <div class="analysis-section">
+                        <h3 class="section-title">🚦 Traffic-Light Analysis</h3>
+                        <div id="btc-status" class="status-badge yellow">NEUTRAL</div>
+                        <p id="btc-explanation" class="analysis-explanation">
                             Analyzing market conditions and technical indicators...
+                        </p>
+                        <div class="signals-title">Market Signals:</div>
+                        <ul id="btc-signals" class="market-signals">
+                            <li>Initializing technical analysis...</li>
+                            <li>Loading market data...</li>
+                        </ul>
+
+                        <div class="technical-indicators">
+                            <div class="indicator">
+                                <div class="indicator-label">20-Day SMA</div>
+                                <div id="btc-sma20" class="indicator-value">$0</div>
+                            </div>
+                            <div class="indicator">
+                                <div class="indicator-label">50-Day SMA</div>
+                                <div id="btc-sma50" class="indicator-value">$0</div>
+                            </div>
+                            <div class="indicator">
+                                <div class="indicator-label">200-Day SMA</div>
+                                <div id="btc-sma200" class="indicator-value">$0</div>
+                            </div>
+                            <div class="indicator">
+                                <div class="indicator-label">RSI (14)</div>
+                                <div id="btc-rsi" class="indicator-value rsi-value neutral">50.0</div>
+                            </div>
                         </div>
-                        
-                        <div class="traffic-signals">
-                            <div class="signals-title">Market Signals:</div>
-                            <ul id="btc-signals" class="signals-list">
-                                <li>Initializing technical analysis...</li>
-                                <li>Loading market data...</li>
-                            </ul>
+
+                        <div class="technical-indicators">
+                            <div class="indicator">
+                                <div class="indicator-label">MACD Analysis</div>
+                                <div id="btc-macd" class="macd-container">
+                                    <span class="macd-line">MACD: 0.0</span>
+                                    <span class="signal-line">Signal: 0.0</span>
+                                    <span class="histogram neutral">Histogram: 0.0</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- News Sentiment -->
-                    <div class="news-sentiment">
-                        <h3 class="section-title">News Sentiment</h3>
-                        <div class="sentiment-badge">
-                            <span class="sentiment-label">Overall Sentiment:</span>
-                            <span class="sentiment-value neutral">NEUTRAL</span>
+                    <div class="analysis-section">
+                        <h3 class="section-title">📰 News Sentiment</h3>
+                        <div class="sentiment-details">
+                            <div id="overall-sentiment" class="sentiment-badge neutral">NEUTRAL</div>
+                            <p id="sentiment-description" class="sentiment-description">
+                                Market sentiment analysis loading...
+                            </p>
+                            <div id="sentiment-score" class="sentiment-score neutral">Sentiment Score: 0</div>
                         </div>
-                        <div class="sentiment-description">
-                            Market sentiment is mixed with balanced coverage across positive (40%) and negative (60%) news.
-                        </div>
-                        <div class="news-items">
-                            <div class="news-item">SEC Approves In-Kind Redemptions for All Spot Bitcoin and Ethereum ETFs</div>
-                            <div class="news-item">Michael Saylor's Strategy Makes Massive $2.4B Bitcoin Purchase With Preferred Stock Sale Proceeds</div>
-                            <div class="news-item">Bitcoin in limbo: Watch these BTC price levels to watch ahead of FOMC</div>
-                            <div class="news-item">-1% dip or $141K breakout? Bitcoin speculators dictate BTC price targets</div>
-                            <div class="news-item">What happens if Bitcoin reaches $1 million?</div>
+                        <div id="news-articles" class="news-articles">
+                            <div class="news-item">
+                                <div class="news-header">
+                                    <h4 class="news-title">Loading latest crypto news...</h4>
+                                    <span class="news-source">Crypto Daily Pulse</span>
+                                </div>
+                                <p class="news-description">Please wait while we fetch the latest market news and analysis.</p>
+                                <div class="news-footer">
+                                    <span class="news-date">Loading...</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- Ethereum Section -->
-            <div class="crypto-card">
+            <section class="crypto-card">
                 <div class="crypto-header">
                     <h2 class="crypto-name">Ethereum (ETH/USDT)</h2>
-                    <div id="eth-price" class="crypto-price">$0.00</div>
+                    <div class="price-container">
+                        <div id="eth-price" class="crypto-price">$0.00</div>
+                        <div id="eth-change" class="change">+0.00%</div>
+                    </div>
                 </div>
-                
-                <div class="crypto-content">
-                    <!-- Traffic-Light Analysis -->
-                    <div class="traffic-light-analysis">
-                        <div class="traffic-light-header">
-                            <h3 class="traffic-light-title">Technical Analysis</h3>
-                            <div id="eth-status" class="traffic-status">NEUTRAL</div>
-                        </div>
-                        
-                        <div id="eth-explanation" class="traffic-explanation">
+
+                <div class="analysis-grid">
+                    <div class="analysis-section">
+                        <h3 class="section-title">🚦 Traffic-Light Analysis</h3>
+                        <div id="eth-status" class="status-badge yellow">NEUTRAL</div>
+                        <p id="eth-explanation" class="analysis-explanation">
                             Analyzing market conditions and technical indicators...
+                        </p>
+                        <div class="signals-title">Market Signals:</div>
+                        <ul id="eth-signals" class="market-signals">
+                            <li>Initializing technical analysis...</li>
+                            <li>Loading market data...</li>
+                        </ul>
+
+                        <div class="technical-indicators">
+                            <div class="indicator">
+                                <div class="indicator-label">20-Day SMA</div>
+                                <div id="eth-sma20" class="indicator-value">$0</div>
+                            </div>
+                            <div class="indicator">
+                                <div class="indicator-label">50-Day SMA</div>
+                                <div id="eth-sma50" class="indicator-value">$0</div>
+                            </div>
+                            <div class="indicator">
+                                <div class="indicator-label">200-Day SMA</div>
+                                <div id="eth-sma200" class="indicator-value">$0</div>
+                            </div>
+                            <div class="indicator">
+                                <div class="indicator-label">RSI (14)</div>
+                                <div id="eth-rsi" class="indicator-value rsi-value neutral">50.0</div>
+                            </div>
                         </div>
-                        
-                        <div class="traffic-signals">
-                            <div class="signals-title">Market Signals:</div>
-                            <ul id="eth-signals" class="signals-list">
-                                <li>Initializing technical analysis...</li>
-                                <li>Loading market data...</li>
-                            </ul>
+
+                        <div class="technical-indicators">
+                            <div class="indicator">
+                                <div class="indicator-label">MACD Analysis</div>
+                                <div id="eth-macd" class="macd-container">
+                                    <span class="macd-line">MACD: 0.0</span>
+                                    <span class="signal-line">Signal: 0.0</span>
+                                    <span class="histogram neutral">Histogram: 0.0</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- News Sentiment -->
-                    <div class="news-sentiment">
-                        <h3 class="section-title">News Sentiment</h3>
-                        <div class="sentiment-badge">
-                            <span class="sentiment-label">Overall Sentiment:</span>
-                            <span class="sentiment-value neutral">NEUTRAL</span>
+                    <div class="analysis-section">
+                        <h3 class="section-title">📰 News Sentiment</h3>
+                        <div class="sentiment-details">
+                            <div class="sentiment-badge neutral">NEUTRAL</div>
+                            <p class="sentiment-description">
+                                Market sentiment analysis loading...
+                            </p>
+                            <div class="sentiment-score neutral">Sentiment Score: 0</div>
                         </div>
-                        <div class="sentiment-description">
-                            Market sentiment is mixed with balanced coverage across positive (60%) and negative (40%) news.
-                        </div>
-                        <div class="news-items">
-                            <div class="news-item">SEC Approves In-Kind Redemptions for All Spot Bitcoin and Ethereum ETFs</div>
-                            <div class="news-item">Ethereum Defies Bitcoin Slump as Analysts See Path to $5,000</div>
-                            <div class="news-item">'Unleash the Zilla': Biotech Rebrands to ETHZilla, Raising Monster $425M for Ethereum Treasury</div>
+                        <div class="news-articles">
+                            <div class="news-item">
+                                <div class="news-header">
+                                    <h4 class="news-title">Loading latest crypto news...</h4>
+                                    <span class="news-source">Crypto Daily Pulse</span>
+                                </div>
+                                <p class="news-description">Please wait while we fetch the latest market news and analysis.</p>
+                                <div class="news-footer">
+                                    <span class="news-date">Loading...</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </main>
     </div>
 
-    <script src="realtime_script.js"></script>
+    <script src="enhanced_realtime_script.js"></script>
 </body>
 </html>
 
