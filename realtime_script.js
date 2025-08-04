@@ -1,4 +1,4 @@
-class CryptoDashboard {
+class EnhancedCryptoDashboard {
     constructor() {
         this.websocketUrl = 'wss://167.172.151.11.nip.io';
         this.websocket = null;
@@ -11,7 +11,7 @@ class CryptoDashboard {
     }
 
     init() {
-        this.updateConnectionStatus('connecting');
+        this.updateConnectionStatus('CONNECTING', 'Connecting to live data...');
         this.connectWebSocket();
     }
 
@@ -23,13 +23,16 @@ class CryptoDashboard {
                 console.log('WebSocket connected');
                 this.isConnected = true;
                 this.reconnectAttempts = 0;
-                this.updateConnectionStatus('connected');
+                this.updateConnectionStatus('LIVE', `Last Updated ${new Date().toLocaleString()}`);
             };
 
             this.websocket.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
-                    this.handleWebSocketMessage(data);
+                    if (data.type === 'full_update' && data.data) {
+                        this.updateDashboard(data.data);
+                        this.updateConnectionStatus('LIVE', `Last Updated ${new Date().toLocaleString()}`);
+                    }
                 } catch (error) {
                     console.error('Error parsing WebSocket message:', error);
                 }
@@ -38,267 +41,255 @@ class CryptoDashboard {
             this.websocket.onclose = () => {
                 console.log('WebSocket disconnected');
                 this.isConnected = false;
-                this.updateConnectionStatus('disconnected');
-                this.attemptReconnect();
+                this.updateConnectionStatus('OFFLINE', 'Connection lost. Attempting to reconnect...');
+                this.handleReconnect();
             };
 
             this.websocket.onerror = (error) => {
                 console.error('WebSocket error:', error);
-                this.updateConnectionStatus('error');
+                this.updateConnectionStatus('OFFLINE', 'Connection error. Retrying...');
             };
 
         } catch (error) {
             console.error('Error creating WebSocket:', error);
-            this.updateConnectionStatus('error');
-            this.attemptReconnect();
+            this.updateConnectionStatus('OFFLINE', 'Failed to connect. Retrying...');
+            this.handleReconnect();
         }
     }
 
-    handleWebSocketMessage(data) {
-        if (data.btc) {
-            this.updateCryptoData('btc', data.btc);
+    handleReconnect() {
+        if (this.reconnectAttempts < this.maxReconnectAttempts) {
+            this.reconnectAttempts++;
+            console.log(`Reconnection attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts}`);
+            setTimeout(() => {
+                this.connectWebSocket();
+            }, this.reconnectDelay);
+        } else {
+            this.updateConnectionStatus('OFFLINE', 'Connection failed. Please refresh the page.');
         }
-        if (data.eth) {
-            this.updateCryptoData('eth', data.eth);
+    }
+
+    updateConnectionStatus(status, message) {
+        const statusElement = document.getElementById('connection-status');
+        const messageElement = document.getElementById('status-message');
+        
+        if (statusElement) {
+            statusElement.textContent = status;
+            statusElement.className = `status ${status.toLowerCase()}`;
         }
         
-        // Update last updated time
-        if (data.last_updated) {
-            this.updateLastUpdated(data.last_updated);
+        if (messageElement) {
+            messageElement.textContent = message;
         }
     }
 
-    updateCryptoData(crypto, data) {
+    updateDashboard(data) {
+        // Update Bitcoin data
+        if (data.btc) {
+            this.updateCryptoSection('btc', data.btc);
+        }
+        
+        // Update Ethereum data
+        if (data.eth) {
+            this.updateCryptoSection('eth', data.eth);
+        }
+        
+        // Update News section
+        if (data.news) {
+            this.updateNewsSection(data.news);
+        }
+    }
+
+    updateCryptoSection(crypto, cryptoData) {
+        const cryptoName = crypto.toUpperCase();
+        
         // Update price
         const priceElement = document.getElementById(`${crypto}-price`);
-        if (priceElement && data.price) {
-            priceElement.textContent = `$${data.price.toLocaleString('en-US', {
+        if (priceElement && cryptoData.price) {
+            priceElement.textContent = `$${cryptoData.price.toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             })}`;
         }
 
-        // Calculate and update traffic-light analysis
-        this.updateTrafficLightAnalysis(crypto, data);
-    }
-
-    calculateTrafficLightStatus(crypto, data) {
-        if (!data.price) return this.getDefaultStatus();
-
-        const price = data.price;
-        let bullishSignals = 0;
-        let bearishSignals = 0;
-        let signals = [];
-
-        // Price-based analysis
-        if (crypto === 'btc') {
-            if (price > 110000) {
-                bullishSignals += 2;
-                signals.push("Price above $110K resistance");
-            } else if (price < 95000) {
-                bearishSignals += 2;
-                signals.push("Price below $95K support");
-            } else {
-                signals.push("Price in consolidation range");
-            }
-
-            if (price > 105000) {
-                bullishSignals += 1;
-                signals.push("Strong psychological level hold");
-            }
-        } else if (crypto === 'eth') {
-            if (price > 3800) {
-                bullishSignals += 2;
-                signals.push("Price above $3,800 resistance");
-            } else if (price < 3200) {
-                bearishSignals += 2;
-                signals.push("Price below $3,200 support");
-            } else {
-                signals.push("Price in consolidation range");
-            }
-
-            if (price > 3500) {
-                bullishSignals += 1;
-                signals.push("Altcoin strength showing");
-            }
+        // Update 24h change
+        const changeElement = document.getElementById(`${crypto}-change`);
+        if (changeElement && cryptoData.change_24h !== undefined) {
+            const change = cryptoData.change_24h;
+            const changeText = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+            changeElement.textContent = changeText;
+            changeElement.className = `change ${change >= 0 ? 'positive' : 'negative'}`;
         }
 
-        // Technical indicators simulation (since we're using existing data)
-        const rsi = this.simulateRSI(price);
-        if (rsi > 70) {
-            bearishSignals += 1;
-            signals.push("RSI indicates overbought conditions");
-        } else if (rsi < 30) {
-            bullishSignals += 1;
-            signals.push("RSI indicates oversold conditions");
-        } else if (rsi > 50) {
-            bullishSignals += 0.5;
-            signals.push("RSI shows bullish momentum");
-        } else {
-            bearishSignals += 0.5;
-            signals.push("RSI shows bearish momentum");
-        }
-
-        // Moving average simulation
-        const sma20 = price * 0.98; // Approximate
-        const sma50 = price * 0.95; // Approximate
-        
-        if (price > sma20 && price > sma50) {
-            bullishSignals += 1;
-            signals.push("Price above key moving averages");
-        } else if (price < sma20 && price < sma50) {
-            bearishSignals += 1;
-            signals.push("Price below key moving averages");
-        }
-
-        // MACD simulation
-        const macdBullish = Math.random() > 0.5; // Simplified
-        if (macdBullish) {
-            bullishSignals += 0.5;
-            signals.push("MACD showing bullish divergence");
-        } else {
-            bearishSignals += 0.5;
-            signals.push("MACD showing bearish divergence");
-        }
-
-        // Determine overall status
-        const netSignal = bullishSignals - bearishSignals;
-        
-        if (netSignal >= 2) {
-            return {
-                status: 'BULLISH',
-                color: '#00ff88',
-                bgColor: 'rgba(0, 255, 136, 0.1)',
-                explanation: `Strong bullish signals detected across multiple indicators. ${this.getCryptoName(crypto)} showing positive momentum with ${Math.round(bullishSignals)} bullish factors outweighing ${Math.round(bearishSignals)} bearish factors.`,
-                signals: signals.slice(0, 4) // Show top 4 signals
-            };
-        } else if (netSignal <= -2) {
-            return {
-                status: 'BEARISH',
-                color: '#ff4757',
-                bgColor: 'rgba(255, 71, 87, 0.1)',
-                explanation: `Strong bearish signals detected across multiple indicators. ${this.getCryptoName(crypto)} showing negative momentum with ${Math.round(bearishSignals)} bearish factors outweighing ${Math.round(bullishSignals)} bullish factors.`,
-                signals: signals.slice(0, 4)
-            };
-        } else {
-            return {
-                status: 'NEUTRAL',
-                color: '#ffa502',
-                bgColor: 'rgba(255, 165, 2, 0.1)',
-                explanation: `Mixed signals detected with balanced bullish and bearish indicators. ${this.getCryptoName(crypto)} in consolidation phase with ${Math.round(bullishSignals)} bullish and ${Math.round(bearishSignals)} bearish factors.`,
-                signals: signals.slice(0, 4)
-            };
+        // Update traffic-light analysis
+        if (cryptoData.traffic_light) {
+            this.updateTrafficLightAnalysis(crypto, cryptoData.traffic_light);
         }
     }
 
-    simulateRSI(price) {
-        // Simplified RSI simulation based on price
-        const base = 50;
-        const variation = (price % 100) / 100 * 40 - 20; // -20 to +20
-        return Math.max(10, Math.min(90, base + variation));
-    }
-
-    getCryptoName(crypto) {
-        return crypto === 'btc' ? 'Bitcoin' : 'Ethereum';
-    }
-
-    getDefaultStatus() {
-        return {
-            status: 'NEUTRAL',
-            color: '#ffa502',
-            bgColor: 'rgba(255, 165, 2, 0.1)',
-            explanation: 'Waiting for market data to analyze signals...',
-            signals: ['Connecting to live data feed', 'Initializing technical indicators']
-        };
-    }
-
-    updateTrafficLightAnalysis(crypto, data) {
-        const analysis = this.calculateTrafficLightStatus(crypto, data);
-        
+    updateTrafficLightAnalysis(crypto, trafficLight) {
         // Update status badge
         const statusElement = document.getElementById(`${crypto}-status`);
         if (statusElement) {
-            statusElement.textContent = analysis.status;
-            statusElement.style.color = analysis.color;
-            statusElement.style.backgroundColor = analysis.bgColor;
-            statusElement.style.border = `2px solid ${analysis.color}`;
+            statusElement.textContent = trafficLight.status.toUpperCase();
+            statusElement.className = `status-badge ${trafficLight.color}`;
         }
 
         // Update explanation
         const explanationElement = document.getElementById(`${crypto}-explanation`);
         if (explanationElement) {
-            explanationElement.textContent = analysis.explanation;
+            explanationElement.textContent = trafficLight.explanation;
         }
 
-        // Update signals list
+        // Update market signals
         const signalsElement = document.getElementById(`${crypto}-signals`);
-        if (signalsElement && analysis.signals) {
-            signalsElement.innerHTML = analysis.signals
+        if (signalsElement && trafficLight.signals) {
+            signalsElement.innerHTML = trafficLight.signals
                 .map(signal => `<li>${signal}</li>`)
                 .join('');
         }
-    }
 
-    updateConnectionStatus(status) {
-        const statusElement = document.getElementById('connection-status');
-        const statusText = document.getElementById('status-text');
-        
-        if (!statusElement || !statusText) return;
-
-        switch (status) {
-            case 'connecting':
-                statusElement.className = 'status-indicator connecting';
-                statusText.textContent = 'CONNECTING';
-                break;
-            case 'connected':
-                statusElement.className = 'status-indicator connected';
-                statusText.textContent = 'LIVE';
-                break;
-            case 'disconnected':
-                statusElement.className = 'status-indicator disconnected';
-                statusText.textContent = 'OFFLINE';
-                break;
-            case 'error':
-                statusElement.className = 'status-indicator error';
-                statusText.textContent = 'ERROR';
-                break;
+        // Update technical data display
+        if (trafficLight.technical_data) {
+            this.updateTechnicalData(crypto, trafficLight.technical_data);
         }
     }
 
-    updateLastUpdated(timestamp) {
-        const element = document.getElementById('last-updated');
-        if (element) {
-            const date = new Date(timestamp);
-            const options = {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                timeZoneName: 'short'
-            };
-            element.textContent = `Last Updated ${date.toLocaleDateString('en-US', options)} (Live)`;
+    updateTechnicalData(crypto, technicalData) {
+        // Update SMA values
+        if (technicalData.sma_20) {
+            const sma20Element = document.getElementById(`${crypto}-sma20`);
+            if (sma20Element) {
+                sma20Element.textContent = `$${technicalData.sma_20.toLocaleString()}`;
+            }
+        }
+
+        if (technicalData.sma_50) {
+            const sma50Element = document.getElementById(`${crypto}-sma50`);
+            if (sma50Element) {
+                sma50Element.textContent = `$${technicalData.sma_50.toLocaleString()}`;
+            }
+        }
+
+        if (technicalData.sma_200) {
+            const sma200Element = document.getElementById(`${crypto}-sma200`);
+            if (sma200Element) {
+                sma200Element.textContent = `$${technicalData.sma_200.toLocaleString()}`;
+            }
+        }
+
+        // Update RSI
+        if (technicalData.rsi) {
+            const rsiElement = document.getElementById(`${crypto}-rsi`);
+            if (rsiElement) {
+                rsiElement.textContent = technicalData.rsi.toFixed(1);
+                
+                // Add RSI color coding
+                const rsiValue = technicalData.rsi;
+                let rsiClass = 'neutral';
+                if (rsiValue > 70) rsiClass = 'overbought';
+                else if (rsiValue < 30) rsiClass = 'oversold';
+                
+                rsiElement.className = `rsi-value ${rsiClass}`;
+            }
+        }
+
+        // Update MACD
+        if (technicalData.macd) {
+            const macdElement = document.getElementById(`${crypto}-macd`);
+            if (macdElement) {
+                const macd = technicalData.macd;
+                macdElement.innerHTML = `
+                    <span class=\"macd-line\">MACD: ${macd.macd_line}</span>
+                    <span class=\"signal-line\">Signal: ${macd.signal_line}</span>
+                    <span class=\"histogram ${macd.histogram >= 0 ? 'positive' : 'negative'}\">
+                        Histogram: ${macd.histogram}
+                    </span>
+                `;
+            }
         }
     }
 
-    attemptReconnect() {
-        if (this.reconnectAttempts < this.maxReconnectAttempts) {
-            this.reconnectAttempts++;
-            console.log(`Attempting to reconnect... (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+    updateNewsSection(newsData) {
+        // Update overall sentiment
+        if (newsData.sentiment) {
+            this.updateNewsSentiment(newsData.sentiment);
+        }
+
+        // Update news articles
+        if (newsData.articles) {
+            this.updateNewsArticles(newsData.articles);
+        }
+    }
+
+    updateNewsSentiment(sentiment) {
+        // Update overall sentiment badge
+        const sentimentElement = document.getElementById('overall-sentiment');
+        if (sentimentElement) {
+            sentimentElement.textContent = sentiment.overall_sentiment;
+            sentimentElement.className = `sentiment-badge ${sentiment.overall_sentiment.toLowerCase()}`;
+        }
+
+        // Update sentiment description
+        const descriptionElement = document.getElementById('sentiment-description');
+        if (descriptionElement) {
+            const posPercent = sentiment.positive_percentage || 0;
+            const negPercent = sentiment.negative_percentage || 0;
+            descriptionElement.textContent = 
+                `Market sentiment analysis: ${posPercent}% positive, ${negPercent}% negative news coverage`;
+        }
+
+        // Update sentiment score
+        const scoreElement = document.getElementById('sentiment-score');
+        if (scoreElement) {
+            const score = sentiment.sentiment_score || 0;
+            scoreElement.textContent = `Sentiment Score: ${score >= 0 ? '+' : ''}${score}`;
+            scoreElement.className = `sentiment-score ${score > 0 ? 'positive' : score < 0 ? 'negative' : 'neutral'}`;
+        }
+    }
+
+    updateNewsArticles(articles) {
+        const newsContainer = document.getElementById('news-articles');
+        if (!newsContainer) return;
+
+        if (!articles || articles.length === 0) {
+            newsContainer.innerHTML = '<p class=\"no-news\">No recent news available</p>';
+            return;
+        }
+
+        const newsHTML = articles.map(article => {
+            const publishedDate = article.published_at ? 
+                new Date(article.published_at).toLocaleDateString() : 'Recent';
             
-            setTimeout(() => {
-                this.connectWebSocket();
-            }, this.reconnectDelay);
-            
-            // Increase delay for next attempt
-            this.reconnectDelay = Math.min(this.reconnectDelay * 1.5, 30000);
-        } else {
-            console.log('Max reconnection attempts reached');
-            this.updateConnectionStatus('error');
-        }
+            return `
+                <div class=\"news-item\">
+                    <div class=\"news-header\">
+                        <h4 class=\"news-title\">${this.escapeHtml(article.title)}</h4>
+                        <span class=\"news-source\">${this.escapeHtml(article.source)}</span>
+                    </div>
+                    <p class=\"news-description\">${this.escapeHtml(article.description)}</p>
+                    <div class=\"news-footer\">
+                        <span class=\"news-date\">${publishedDate}</span>
+                        ${article.url && article.url !== '#' ? 
+                            `<a href=\"${article.url}\" target=\"_blank\" class=\"news-link\">Read more</a>` : 
+                            ''
+                        }
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        newsContainer.innerHTML = newsHTML;
     }
 
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Send ping to keep connection alive
     sendPing() {
         if (this.websocket && this.websocket.readyState === WebSocket.OPEN) {
             this.websocket.send(JSON.stringify({ type: 'ping' }));
@@ -308,10 +299,18 @@ class CryptoDashboard {
 
 // Initialize dashboard when page loads
 document.addEventListener('DOMContentLoaded', () => {
-    const dashboard = new CryptoDashboard();
+    const dashboard = new EnhancedCryptoDashboard();
     
     // Send ping every 30 seconds to keep connection alive
     setInterval(() => {
         dashboard.sendPing();
     }, 30000);
+});
+
+// Handle page visibility changes
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+        // Page became visible, refresh connection if needed
+        console.log('Page became visible, checking connection...');
+    }
 });
