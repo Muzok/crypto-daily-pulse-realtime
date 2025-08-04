@@ -3,7 +3,7 @@
 class RealTimeCryptoDashboard {
     constructor() {
         this.dataFile = 'analysis.json';
-        this.websocketUrl = 'ws://167.172.151.11:8765';
+        this.websocketUrl = 'wss://167.172.151.11.nip.io';
         this.websocket = null;
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
