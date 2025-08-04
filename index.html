@@ -3,115 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Daily Pulse - Real-time</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Crypto Daily Pulse - Real-time Analysis</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Traffic-Light Dashboard Styles */
+        .traffic-light-analysis {
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .traffic-light-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .traffic-light-title {
+            color: #00ff88;
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .traffic-status {
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 900;
+            font-size: 1rem;
+            font-family: 'Orbitron', monospace;
+            text-align: center;
+            min-width: 100px;
+            border: 2px solid;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .traffic-explanation {
+            color: #ffffff;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(0, 255, 136, 0.05);
+            border-left: 4px solid #00ff88;
+            border-radius: 8px;
+        }
+
+        .traffic-signals {
+            margin-top: 15px;
+        }
+
+        .signals-title {
+            color: #00ff88;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .signals-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .signals-list li {
+            color: #ffffff;
+            font-size: 0.85rem;
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .signals-list li:before {
+            content: "▶";
+            color: #00ff88;
+            position: absolute;
+            left: 0;
+            top: 5px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .traffic-light-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .traffic-status {
+                min-width: 120px;
+            }
+
+            .traffic-explanation {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Enhanced crypto card styling */
+        .crypto-card {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 136, 0.05) 100%);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 255, 136, 0.1);
+        }
+
+        .crypto-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .crypto-name {
+            color: #00ff88;
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .crypto-price {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-family: 'Orbitron', monospace;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .crypto-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .crypto-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
             <h1 class="title">Crypto Daily Pulse</h1>
-            <div class="subtitle">Real-time Technical & News Analysis <span class="live-indicator"></span></div>
-            <div class="last-updated" id="lastUpdated">Last Updated: Connecting to live data...</div>
+            <p class="subtitle">Real-time Technical & News Analysis</p>
+            <div class="status-container">
+                <div id="connection-status" class="status-indicator connecting"></div>
+                <span id="status-text" class="status-text">CONNECTING</span>
+            </div>
+            <p id="last-updated" class="last-updated">Last Updated Connecting to live data...</p>
         </header>
 
         <main class="main-content">
-            <div class="crypto-section live-data" id="btc-section">
+            <!-- Bitcoin Section -->
+            <div class="crypto-card">
                 <div class="crypto-header">
-                    <h2 class="crypto-title">Bitcoin (BTC/USDT)</h2>
-                    <div class="price-display" id="btc-price">$0.00</div>
+                    <h2 class="crypto-name">Bitcoin (BTC/USDT)</h2>
+                    <div id="btc-price" class="crypto-price">$0.00</div>
                 </div>
                 
-                <div class="analysis-grid">
-                    <div class="analysis-card technical-card">
-                        <h3 class="card-title">Technical Analysis</h3>
-                        <div class="indicator-row">
-                            <span class="indicator-label">20-Day SMA:</span>
-                            <span class="indicator-value loading" id="btc-sma20">Loading...</span>
+                <div class="crypto-content">
+                    <!-- Traffic-Light Analysis -->
+                    <div class="traffic-light-analysis">
+                        <div class="traffic-light-header">
+                            <h3 class="traffic-light-title">Technical Analysis</h3>
+                            <div id="btc-status" class="traffic-status">NEUTRAL</div>
                         </div>
-                        <div class="indicator-row">
-                            <span class="indicator-label">50-Day SMA:</span>
-                            <span class="indicator-value loading" id="btc-sma50">Loading...</span>
+                        
+                        <div id="btc-explanation" class="traffic-explanation">
+                            Analyzing market conditions and technical indicators...
                         </div>
-                        <div class="indicator-row">
-                            <span class="indicator-label">RSI (14):</span>
-                            <span class="indicator-value loading" id="btc-rsi">Loading...</span>
-                        </div>
-                        <div class="technical-summary" id="btc-technical-summary">
-                            Loading technical analysis...
+                        
+                        <div class="traffic-signals">
+                            <div class="signals-title">Market Signals:</div>
+                            <ul id="btc-signals" class="signals-list">
+                                <li>Initializing technical analysis...</li>
+                                <li>Loading market data...</li>
+                            </ul>
                         </div>
                     </div>
 
-                    <div class="analysis-card news-card">
-                        <h3 class="card-title">News Sentiment</h3>
-                        <div class="sentiment-indicator" id="btc-sentiment">
+                    <!-- News Sentiment -->
+                    <div class="news-sentiment">
+                        <h3 class="section-title">News Sentiment</h3>
+                        <div class="sentiment-badge">
                             <span class="sentiment-label">Overall Sentiment:</span>
-                            <span class="sentiment-value">Loading...</span>
+                            <span class="sentiment-value neutral">NEUTRAL</span>
                         </div>
-                        <div class="news-summary" id="btc-news-summary">
-                            Loading news analysis...
+                        <div class="sentiment-description">
+                            Market sentiment is mixed with balanced coverage across positive (40%) and negative (60%) news.
                         </div>
-                        <div class="news-headlines" id="btc-headlines">
-                            <!-- Headlines will be populated here -->
+                        <div class="news-items">
+                            <div class="news-item">SEC Approves In-Kind Redemptions for All Spot Bitcoin and Ethereum ETFs</div>
+                            <div class="news-item">Michael Saylor's Strategy Makes Massive $2.4B Bitcoin Purchase With Preferred Stock Sale Proceeds</div>
+                            <div class="news-item">Bitcoin in limbo: Watch these BTC price levels to watch ahead of FOMC</div>
+                            <div class="news-item">-1% dip or $141K breakout? Bitcoin speculators dictate BTC price targets</div>
+                            <div class="news-item">What happens if Bitcoin reaches $1 million?</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="crypto-section live-data" id="eth-section">
+            <!-- Ethereum Section -->
+            <div class="crypto-card">
                 <div class="crypto-header">
-                    <h2 class="crypto-title">Ethereum (ETH/USDT)</h2>
-                    <div class="price-display" id="eth-price">$0.00</div>
+                    <h2 class="crypto-name">Ethereum (ETH/USDT)</h2>
+                    <div id="eth-price" class="crypto-price">$0.00</div>
                 </div>
                 
-                <div class="analysis-grid">
-                    <div class="analysis-card technical-card">
-                        <h3 class="card-title">Technical Analysis</h3>
-                        <div class="indicator-row">
-                            <span class="indicator-label">20-Day SMA:</span>
-                            <span class="indicator-value loading" id="eth-sma20">Loading...</span>
+                <div class="crypto-content">
+                    <!-- Traffic-Light Analysis -->
+                    <div class="traffic-light-analysis">
+                        <div class="traffic-light-header">
+                            <h3 class="traffic-light-title">Technical Analysis</h3>
+                            <div id="eth-status" class="traffic-status">NEUTRAL</div>
                         </div>
-                        <div class="indicator-row">
-                            <span class="indicator-label">50-Day SMA:</span>
-                            <span class="indicator-value loading" id="eth-sma50">Loading...</span>
+                        
+                        <div id="eth-explanation" class="traffic-explanation">
+                            Analyzing market conditions and technical indicators...
                         </div>
-                        <div class="indicator-row">
-                            <span class="indicator-label">RSI (14):</span>
-                            <span class="indicator-value loading" id="eth-rsi">Loading...</span>
-                        </div>
-                        <div class="technical-summary" id="eth-technical-summary">
-                            Loading technical analysis...
+                        
+                        <div class="traffic-signals">
+                            <div class="signals-title">Market Signals:</div>
+                            <ul id="eth-signals" class="signals-list">
+                                <li>Initializing technical analysis...</li>
+                                <li>Loading market data...</li>
+                            </ul>
                         </div>
                     </div>
 
-                    <div class="analysis-card news-card">
-                        <h3 class="card-title">News Sentiment</h3>
-                        <div class="sentiment-indicator" id="eth-sentiment">
+                    <!-- News Sentiment -->
+                    <div class="news-sentiment">
+                        <h3 class="section-title">News Sentiment</h3>
+                        <div class="sentiment-badge">
                             <span class="sentiment-label">Overall Sentiment:</span>
-                            <span class="sentiment-value">Loading...</span>
+                            <span class="sentiment-value neutral">NEUTRAL</span>
                         </div>
-                        <div class="news-summary" id="eth-news-summary">
-                            Loading news analysis...
+                        <div class="sentiment-description">
+                            Market sentiment is mixed with balanced coverage across positive (60%) and negative (40%) news.
                         </div>
-                        <div class="news-headlines" id="eth-headlines">
-                            <!-- Headlines will be populated here -->
+                        <div class="news-items">
+                            <div class="news-item">SEC Approves In-Kind Redemptions for All Spot Bitcoin and Ethereum ETFs</div>
+                            <div class="news-item">Ethereum Defies Bitcoin Slump as Analysts See Path to $5,000</div>
+                            <div class="news-item">'Unleash the Zilla': Biotech Rebrands to ETHZilla, Raising Monster $425M for Ethereum Treasury</div>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
-
-        <footer class="footer">
-            <p>&copy; 2024 Crypto Daily Pulse. Real-time data provided for informational purposes only.</p>
-            <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 5px;">
-                Live prices via Binance WebSocket API | Technical analysis updated every 5 minutes
-            </p>
-        </footer>
     </div>
 
-    <script src="realtime_script.js"></script>
+    <script src="traffic_light_realtime_script.js"></script>
 </body>
 </html>
 
